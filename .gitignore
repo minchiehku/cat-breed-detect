@@ -1,0 +1,36 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python related
+__pycache__/
+*.py[cod]
+
+# Docker
+.env
+docker-compose.override.yml
+.dockerignore
+
+# Logs and runtime
+*.log
+logs/
+uploads/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.iml
+
+# Static files
+/static/catBreedpic.jpg
+/static/favicon.ico
+
+# Machine learning models
+cat_breed_model.h5
+cat_breed_class_indices.json
+
+# Copilot directory
+/copilot/
+
+# Git
+*.swp

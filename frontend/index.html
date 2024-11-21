@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Breed Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: url('./static/catBreedpic.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 15px;
+        }
+
+        .uploaded-image {
+            margin-top: 15px;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cat Breed Classifier</h1>
+        <input type="file" id="fileInput" accept="image/*">
+        <button onclick="uploadImage()">Classify</button>
+        <img id="uploadedImage" class="uploaded-image" alt="Uploaded Image Preview" style="display: none;">
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById("fileInput");
+            const resultDiv = document.getElementById("result");
+            const uploadedImage = document.getElementById("uploadedImage");
+
+            if (!fileInput.files[0]) {
+                resultDiv.textContent = "Please select an image.";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+
+            try {
+                resultDiv.textContent = "Classifying...";
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                resultDiv.textContent = `Predicted breed: ${data.breed_name}, Confidence: ${(data.confidence * 100).toFixed(2)}%`;
+            } catch (error) {
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
