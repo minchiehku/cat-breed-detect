@@ -1,33 +1,27 @@
-version: '3.9'
+version: "3.9"
 
 services:
   backend:
     build:
-      context: ./backend  # 指向你的後端應用程式的目錄
-      dockerfile: Dockerfile  # 默認為 Dockerfile，這裡可以省略
+      context: ./backend
     ports:
       - "5000:5000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
-      - app-network  # 指定內部網路
+      - app-network
+    environment:
+      - BACKEND_SERVICE_ENDPOINT=http://localhost:5000
 
   frontend:
     build:
-      context: ./frontend  # 指向你的前端應用程式的目錄
-      dockerfile: Dockerfile  # 默認為 Dockerfile，這裡可以省略
+      context: ./frontend
     ports:
-      - "3000:80"  # 將本地的 3000 埠映射到容器內的 80 埠
-    depends_on:
-      - backend
-    environment:
-      - BACKEND_HOST=backend  # 後端的內部服務名稱
+      - "3000:80"
     networks:
-      - app-network  # 指定內部網路
+      - app-network
+    environment:
+      - BACKEND_SERVICE_ENDPOINT=http://backend:5000 # 本地測試
+      # 在雲端上，可以通過 task 定義或其他方法設置此變數
 
 networks:
   app-network:
-    driver: bridge  # 預設 Docker 網路模式
+    driver: bridge
