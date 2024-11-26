@@ -1,6 +1,5 @@
 # cat-breed-detect
 
----
 
 ## catbreeddetect.com
 
@@ -8,7 +7,7 @@ This project is a web-based application designed to predict the breed of a cat f
 
 The application is containerized using **Docker** and **Docker Compose** for streamlined development and deployment. It is hosted on **AWS ECS (Fargate)**, with **ALB (Application Load Balancer)** ensuring scalability and **Route 53** managing domain routing and HTTPS support. This setup leverages AI technology and cloud services to create a robust, scalable platform for accurate and efficient cat breed recognition.
 
----
+
 
 ## catbreeddetect.com Architecture
 
@@ -223,8 +222,6 @@ After completing initial training on Colab, the next step involved migrating the
     
 ---
 
----
-#
 # catbreeddetect.com
 
 ## Features
